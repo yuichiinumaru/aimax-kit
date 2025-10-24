@@ -23,7 +23,7 @@ if [[ ! $NEW_VERSION =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
   exit 1
 fi
 
-echo "Building release packages for $NEW_VERSION"
+echo "Building IA MAX Kit release packages for $NEW_VERSION"
 
 # Create and use .genreleases directory for all build artifacts
 GENRELEASES_DIR=".genreleases"
@@ -44,19 +44,19 @@ generate_commands() {
     [[ -f "$template" ]] || continue
     local name description script_command agent_script_command body
     name=$(basename "$template" .md)
-    
+
     # Normalize line endings
     file_content=$(tr -d '\r' < "$template")
-    
+
     # Extract description and script command from YAML frontmatter
     description=$(printf '%s\n' "$file_content" | awk '/^description:/ {sub(/^description:[[:space:]]*/, ""); print; exit}')
     script_command=$(printf '%s\n' "$file_content" | awk -v sv="$script_variant" '/^[[:space:]]*'"$script_variant"':[[:space:]]*/ {sub(/^[[:space:]]*'"$script_variant"':[[:space:]]*/, ""); print; exit}')
-    
+
     if [[ -z $script_command ]]; then
       echo "Warning: no script command found for $script_variant in $template" >&2
       script_command="(Missing script command for $script_variant)"
     fi
-    
+
     # Extract agent_script command from YAML frontmatter if present
     agent_script_command=$(printf '%s\n' "$file_content" | awk '
       /^agent_scripts:$/ { in_agent_scripts=1; next }
@@ -67,15 +67,15 @@ generate_commands() {
       }
       in_agent_scripts && /^[a-zA-Z]/ { in_agent_scripts=0 }
     ')
-    
+
     # Replace {SCRIPT} placeholder with the script command
     body=$(printf '%s\n' "$file_content" | sed "s|{SCRIPT}|${script_command}|g")
-    
+
     # Replace {AGENT_SCRIPT} placeholder with the agent script command if found
     if [[ -n $agent_script_command ]]; then
       body=$(printf '%s\n' "$body" | sed "s|{AGENT_SCRIPT}|${agent_script_command}|g")
     fi
-    
+
     # Remove the scripts: and agent_scripts: sections from frontmatter while preserving YAML structure
     body=$(printf '%s\n' "$body" | awk '
       /^---$/ { print; if (++dash_count == 1) in_frontmatter=1; else in_frontmatter=0; next }
@@ -85,10 +85,10 @@ generate_commands() {
       in_frontmatter && skip_scripts && /^[[:space:]]/ { next }
       { print }
     ')
-    
+
     # Apply other substitutions
     body=$(printf '%s\n' "$body" | sed "s/{ARGS}/$arg_format/g" | sed "s/__AGENT__/$agent/g" | rewrite_paths)
-    
+
     case $ext in
       toml)
         body=$(printf '%s\n' "$body" | sed 's/\\/\\\\/g')
@@ -103,16 +103,16 @@ generate_commands() {
 
 build_variant() {
   local agent=$1 script=$2
-  local base_dir="$GENRELEASES_DIR/sdd-${agent}-package-${script}"
-  echo "Building $agent ($script) package..."
+  local base_dir="$GENRELEASES_DIR/aimax-${agent}-package-${script}"
+  echo "Building IA MAX Kit $agent ($script) package..."
   mkdir -p "$base_dir"
-  
+
   # Copy base structure but filter scripts by variant
   SPEC_DIR="$base_dir/.specify"
   mkdir -p "$SPEC_DIR"
-  
+
   [[ -d memory ]] && { cp -r memory "$SPEC_DIR/"; echo "Copied memory -> .specify"; }
-  
+
   # Only copy the relevant script variant directory
   if [[ -d scripts ]]; then
     mkdir -p "$SPEC_DIR/scripts"
@@ -129,9 +129,9 @@ build_variant() {
         ;;
     esac
   fi
-  
+
   [[ -d templates ]] && { mkdir -p "$SPEC_DIR/templates"; find templates -type f -not -path "templates/commands/*" -not -name "vscode-settings.json" -exec cp --parents {} "$SPEC_DIR"/ \; ; echo "Copied templates -> .specify/templates"; }
-  
+
   # NOTE: We substitute {ARGS} internally. Outward tokens differ intentionally:
   #   * Markdown/prompt (claude, copilot, cursor-agent, opencode): $ARGUMENTS
   #   * TOML (gemini, qwen): {{args}}
@@ -164,7 +164,8 @@ build_variant() {
       generate_commands opencode md "\$ARGUMENTS" "$base_dir/.opencode/command" "$script" ;;
     windsurf)
       mkdir -p "$base_dir/.windsurf/workflows"
-      generate_commands windsurf md "\$ARGUMENTS" "$base_dir/.windsurf/workflows" "$script" ;;
+      generate_commands windsurf md "\$ARGUMENTS" "$base_dir/.windsurf/workflows" "$script"
+      [[ -f agent_templates/windsurf/WINDSURF.md ]] && cp agent_templates/windsurf/WINDSURF.md "$base_dir/WINDSURF.md" ;;
     codex)
       mkdir -p "$base_dir/.codex/prompts"
       generate_commands codex md "\$ARGUMENTS" "$base_dir/.codex/prompts" "$script" ;;
@@ -185,8 +186,8 @@ build_variant() {
       mkdir -p "$base_dir/.amazonq/prompts"
       generate_commands q md "\$ARGUMENTS" "$base_dir/.amazonq/prompts" "$script" ;;
   esac
-  ( cd "$base_dir" && zip -r "../spec-kit-template-${agent}-${script}-${NEW_VERSION}.zip" . )
-  echo "Created $GENRELEASES_DIR/spec-kit-template-${agent}-${script}-${NEW_VERSION}.zip"
+  ( cd "$base_dir" && zip -r "../aimax-kit-template-${agent}-${script}-${NEW_VERSION}.zip" . )
+  echo "Created $GENRELEASES_DIR/aimax-kit-template-${agent}-${script}-${NEW_VERSION}.zip"
 }
 
 # Determine agent list
@@ -235,6 +236,5 @@ for agent in "${AGENT_LIST[@]}"; do
   done
 done
 
-echo "Archives in $GENRELEASES_DIR:"
-ls -1 "$GENRELEASES_DIR"/spec-kit-template-*-"${NEW_VERSION}".zip
-
+echo "IA MAX Kit archives in $GENRELEASES_DIR:"
+ls -1 "$GENRELEASES_DIR"/aimax-kit-template-*-"${NEW_VERSION}".zip
