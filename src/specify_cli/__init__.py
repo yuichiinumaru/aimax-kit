@@ -636,7 +636,7 @@ def download_template_from_github(
     debug: bool = False,
     github_token: str = None,
 ) -> Tuple[Path, dict]:
-    repo_owner = "suportesaude"
+    repo_owner = "yuichiinumaru"
     repo_name = "aimax-kit"
     if client is None:
         client = httpx.Client(verify=ssl_context)
