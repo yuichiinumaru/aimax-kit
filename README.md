@@ -1,19 +1,39 @@
 <div align="center">
-    <img src="./media/logo_small.webp"/>
-    <h1>🌱 Spec Kit</h1>
-    <h3><em>Build high-quality software faster.</em></h3>
+    <h1>🤖 IA MAX Kit</h1>
+    <h3><em>AI-Driven Multi-Agent Development Framework</em></h3>
 </div>
 
 <p align="center">
-    <strong>An open source toolkit that allows you to focus on product scenarios and predictable outcomes instead of vibe coding every piece from scratch.</strong>
+    <strong>An advanced toolkit for building high-quality software with AI multi-agent systems, emphasizing specification-driven development, orchestration, observability, and autonomous quality assurance.</strong>
 </p>
 
 <p align="center">
-    <a href="https://github.com/github/spec-kit/actions/workflows/release.yml"><img src="https://github.com/github/spec-kit/actions/workflows/release.yml/badge.svg" alt="Release"/></a>
-    <a href="https://github.com/github/spec-kit/stargazers"><img src="https://img.shields.io/github/stars/github/spec-kit?style=social" alt="GitHub stars"/></a>
-    <a href="https://github.com/github/spec-kit/blob/main/LICENSE"><img src="https://img.shields.io/github/license/github/spec-kit" alt="License"/></a>
-    <a href="https://github.github.io/spec-kit/"><img src="https://img.shields.io/badge/docs-GitHub_Pages-blue" alt="Documentation"/></a>
+    <em>Forked from <a href="https://github.com/github/spec-kit">GitHub Spec Kit</a> - enhanced with IA MAX philosophy and multi-agent capabilities</em>
 </p>
+
+---
+
+## 🙏 Attribution
+
+**IA MAX Kit** is built upon the excellent foundation of [GitHub Spec Kit](https://github.com/github/spec-kit) by GitHub. We extend our deepest gratitude to the original maintainers and contributors for their pioneering work in Specification-Driven Development.
+
+### What IA MAX Kit Adds
+
+Building on Spec Kit's solid SDD foundation, IA MAX Kit adds:
+
+- 🧠 **Multi-Agent Orchestration**: Specialized agents (Dev, Reviewer, Refactor, Tester, Monitor, Resolver, Security, Docs)
+- 🗺️ **Repository Planning Graphs (RPG)**: Code context graphs for agent navigation and consistency
+- 💾 **Shared Memory Systems**: Consensus, whiteboard, and persona namespaces with pub/sub
+- 📊 **Deep Observability**: OpenTelemetry integration, structured logging, distributed tracing
+- 🔒 **TEVV Framework**: Test, Evaluation, Verification & Validation (NIST-inspired)
+- 🤝 **SWE-Debate**: Conflict resolution mechanism between agents
+- 🎯 **AI-TDD**: Type-constrained generation, ARCS-like retrieval, incremental parsing
+- 📦 **AI PR Package**: Automated pull request compilation with test results and impact analysis
+- 🔧 **Stack March**: Analytical framework for technology stack selection
+
+**License**: IA MAX Kit maintains the original MIT license from Spec Kit. See [LICENSE](LICENSE) for details.
+
+---
 
 ---
 
@@ -36,17 +56,40 @@
 - [🙏 Acknowledgements](#-acknowledgements)
 - [📄 License](#-license)
 
-## 🤔 What is Spec-Driven Development?
+## 🤔 What is IA MAX?
 
-Spec-Driven Development **flips the script** on traditional software development. For decades, code has been king — specifications were just scaffolding we built and discarded once the "real work" of coding began. Spec-Driven Development changes this: **specifications become executable**, directly generating working implementations rather than just guiding them.
+IA MAX (AI Maximum) combines **Specification-Driven Development** with **Multi-Agent AI Systems** to create an "assembly line" approach to software development. Instead of traditional development where specifications are discarded after coding begins, IA MAX makes specifications the **executable source of truth** that guides multiple specialized AI agents through a robust, quality-assured development process.
+
+### The IA MAX Philosophy
+
+- **3x time on foundations → 300x less rework**: Invest heavily in specifications, graphs, and governance upfront
+- **Assembly line robustness**: Quality gates at every step (TDD, linters, type-checkers, TEVV)
+- **Agent specialization**: Each agent (Dev, Refactor, Tester, Monitor, etc.) has a clear role
+- **Observability by design**: Every action is logged, traced, and measurable
+- **Auto-repair**: Monitor and Resolver agents detect and fix issues autonomously
+
+For more on the philosophy, see the [root documentation](../01-draftchat.md) and [AGENTS.md](AGENTS.md).
 
 ## ⚡ Get Started
 
-### 1. Install Specify CLI
+### 1. Install IA MAX Kit CLI
 
-Choose your preferred installation method:
+> **Note**: IA MAX Kit is currently in private development. Installation from public PyPI will be available after the M0-M3 milestones are complete.
 
-#### Option 1: Persistent Installation (Recommended)
+For now, install from source:
+
+```bash
+# Clone the repository
+git clone https://github.com/suportesaude/aimax-kit.git
+cd aimax-kit
+
+# Install in development mode
+pip install -e .
+```
+
+Once installed, the `specify` CLI will be available (we maintain compatibility with the original command name).
+
+#### Future: PyPI Installation (Coming Soon)
 
 Install once and use everywhere:
 
